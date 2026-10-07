@@ -1,0 +1,34 @@
+{
+  "checkedAt": "2026-10-07T04:16:48.504Z",
+  "engine": "n8n 2.42.3",
+  "results": [
+    {
+      "test": "valid intake",
+      "status": 201,
+      "output": {
+        "statusCode": 201,
+        "duplicate": false,
+        "leadId": 3
+      }
+    },
+    {
+      "test": "duplicate intake",
+      "status": 200,
+      "output": {
+        "statusCode": 200,
+        "duplicate": true,
+        "leadId": 3
+      }
+    },
+    {
+      "test": "invalid email",
+      "status": 400,
+      "output": {
+        "statusCode": 400,
+        "errors": {
+          "email": "Enter a valid email address."
+        }
+      }
+    }
+  ]
+}

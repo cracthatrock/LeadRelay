@@ -1,0 +1,15 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:2.42.3
+    ports:
+      - "127.0.0.1:5686:5678"
+    environment:
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_PERSONALIZATION_ENABLED: "false"
+      N8N_SECURE_COOKIE: "false"
+      N8N_HOST: localhost
+      WEBHOOK_URL: http://localhost:5686/
+    volumes:
+      - n8n_demo:/home/node/.n8n
+volumes:
+  n8n_demo:

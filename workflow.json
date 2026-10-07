@@ -1,0 +1,35 @@
+{
+  "id": "LeadRelayDemo001",
+  "name": "LeadRelay — validate and persist inquiry",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "lead-relay", "responseMode": "responseNode", "options": {} },
+      "id": "inquiry-webhook", "name": "Inquiry webhook", "type": "n8n-nodes-base.webhook", "typeVersion": 2,
+      "position": [0, 0], "webhookId": "lead-relay-demo"
+    },
+    {
+      "parameters": {
+        "method": "POST", "url": "http://host.docker.internal:4196/api/intake",
+        "sendBody": true, "specifyBody": "json", "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": { "timeout": 4000, "response": { "response": { "neverError": true } } }
+      },
+      "id": "persist-inquiry", "name": "Validate and persist atomically", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+      "position": [260, 0], "retryOnFail": true, "maxTries": 2, "waitBetweenTries": 500
+    },
+    {
+      "parameters": { "respondWith": "json", "responseBody": "={{ $json }}", "options": { "responseCode": "={{ $json.statusCode }}" } },
+      "id": "inquiry-response", "name": "Return validated result", "type": "n8n-nodes-base.respondToWebhook", "typeVersion": 1.4,
+      "position": [520, 0]
+    },
+    {
+      "parameters": { "content": "## LeadRelay · local portfolio demo\nThe local service validates input and writes the lead + notification job in one SQLite transaction. Its worker handles durable retries and mock delivery.\n\nKeep the service on loopback. Docker Desktop on the tested Windows machine can reach it. No real email is sent. Do not publish this unauthenticated demo to the internet.\n\nDuplicate input reuses a lead. Read README for dedupe limitations and production requirements.", "height": 300, "width": 650 },
+      "id": "handoff-note", "name": "Architecture and handoff", "type": "n8n-nodes-base.stickyNote", "typeVersion": 1,
+      "position": [0, -350]
+    }
+  ],
+  "connections": {
+    "Inquiry webhook": { "main": [[{ "node": "Validate and persist atomically", "type": "main", "index": 0 }]] },
+    "Validate and persist atomically": { "main": [[{ "node": "Return validated result", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }, "active": false
+}

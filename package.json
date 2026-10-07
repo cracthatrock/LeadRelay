@@ -1,0 +1,12 @@
+{
+  "name": "lead-relay-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local inquiry automation with durable notification retries and an n8n integration",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "test": "node --test test/relay.test.js"
+  },
+  "engines": { "node": ">=22.13" }
+}
